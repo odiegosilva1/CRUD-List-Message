@@ -1,0 +1,18 @@
+{
+  "name": "crud-2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/odiegosilva1/crud-2.git",
+  "author": "Diego Silva <odiegosilvadev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "sucrase": "^3.34.0"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.js"
+    }
+}
