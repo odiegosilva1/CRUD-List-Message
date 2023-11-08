@@ -1,35 +1,31 @@
 import express, { request, response } from 'express';
+import express from 'express';
 const app = express();
 app.use(express.json());
 
-let carros =[]
+let message = []
 let i = 1
 
-
-app.get('/', (req, res) => {
-return res.json('Server rodando');
-
+//Show message
+app.get('/message', (req, res) => {
+  return res.json(message)
 });
 
-app.post('/user', function (req, res) {
-    res.post('Insira um user')
-});
- app.post('/carros', (req, res)=> {
-    const infoRequest = request.body
+//Create a new message
+app.post('/newMessage', (req, res) => {
+  const infoRequest = req.body
 
-    const novoCarro = {
-        id: i++,
-        modelo: infoRequest.modelo,
-        marca: infoRequest.marca,
-        ano: infoRequest.ano,
-        cor:infoRequest.cor,
-        preco:infoRequest.preco
-    }
-    carros.push(novoCarro) {
-        return.res.status(201).json(carros)
-    }
-    carros.push(novoCarro);
-    return response.json('Ok Turma')
- });
+  const newMessage = {
+    id: i++,
+    title: infoRequest.title,
+    desc: infoRequest.desc,
+    senha: infoRequest.senha 
+    
+  }
+
+  message.push(newMessage)
+  return res.status(201).json(message)
+});
+
 
 app.listen(8080, () => console.log("Servidor iniciado"));
