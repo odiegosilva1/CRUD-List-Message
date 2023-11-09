@@ -13,7 +13,7 @@ app.get('/message', (req, res) => {
 });
 
 //Show messages
-app.getMaxListeners('/messageList', (req, res) => {
+app.get('/messageList', (req, res) => {
   return res.json(messageList)
   })
 
