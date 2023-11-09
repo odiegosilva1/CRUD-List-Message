@@ -19,11 +19,14 @@ app.post('/newMessage', (req, res) => {
     id: i++,
     title: infoRequest.title,
     desc: infoRequest.desc,
-    senha: infoRequest.senha 
     
   }
+   //Update a message
+  app.push('/message', (req, res)  => {
+    const infoRequest = req.body
+  }); 
 
-  message.push(newMessage)
+  message.push()
   return res.status(201).json(message)
 });
 
