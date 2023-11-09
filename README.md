@@ -18,5 +18,5 @@ Além disso, prestem atenção nos seguintes pontos
 - Código limpo
 - Utilização dos recursos da linguagem
 
- 
+
 
