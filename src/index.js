@@ -8,7 +8,7 @@ let idMessage = 1
 let idUser = 1
 
 //Root '/'
-app.get('/message', (req, res) => {
+app.get('/', (req, res) => {
   return res.json('ok')
 });
 
