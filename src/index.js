@@ -10,8 +10,8 @@ let idMessage = 1
 let idUser = 1
 
 
-//Root '/'
-app.get('/messageList', (req, res) => {
+
+app.get('/', (req, res) => {
   return res.json('ok')
 });
 
@@ -20,7 +20,6 @@ app.get('/messageList', (req, res) => {
   return res.json(messageList)
   })
 
-  // Create message list
   app.post('/messageList', (req, res) => {
     const body = request.body
     const message = {
@@ -34,7 +33,6 @@ app.get('/messageList', (req, res) => {
     return res.json("Message registered successfully")
   })
 
-  //Update messages list
   app.put('/listaRecados/:id', (req, res) => {
     const body = req.body
     const params = req.params
@@ -57,7 +55,6 @@ app.get('/messageList', (req, res) => {
     } 
   })
 
-  //Del message
   app.delete('/messageList/:id', (res, req) => {
     const params = request.params
 
