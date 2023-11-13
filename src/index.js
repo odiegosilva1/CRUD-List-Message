@@ -1,13 +1,16 @@
 import express, { request, response } from 'express';
 import express from 'express';
 const app = express();
+
 app.use(express.json());
 
-let message = []
+const messageList = []
+const user = []
 let idMessage = 1
 let idUser = 1
 
-//Root '/'
+
+
 app.get('/', (req, res) => {
   return res.json('ok')
 });
@@ -17,7 +20,6 @@ app.get('/messageList', (req, res) => {
   return res.json(messageList)
   })
 
-  // Creat message list
   app.post('/messageList', (req, res) => {
     const body = request.body
     const message = {
@@ -31,7 +33,6 @@ app.get('/messageList', (req, res) => {
     return res.json("Message registered successfully")
   })
 
-  //Update messages list
   app.put('/listaRecados/:id', (req, res) => {
     const body = req.body
     const params = req.params
@@ -54,8 +55,6 @@ app.get('/messageList', (req, res) => {
     } 
   })
 
-  //Del message
-
   app.delete('/messageList/:id', (res, req) => {
     const params = request.params
 
@@ -73,9 +72,8 @@ app.get('/messageList', (req, res) => {
     return res.json("Message deleted successfully")
   })
 
-  //Find users
   app.post('/user', (req, res) => {
-    const body = res.bady
+    const body = res.query
 
     const user = {
       id: idUser++,
@@ -108,7 +106,7 @@ app.get('/messageList', (req, res) => {
 
     }
 
-    users[changeUserIndex] = user
+    user[changeUserIndex] = user
 
     return response.json("User updated successfully")
 
@@ -124,7 +122,6 @@ app.get('/messageList', (req, res) => {
     })
 
     delete users[delUserIndex]
-
     return res.json("User deleted successfully")
   })
 
