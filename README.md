@@ -5,7 +5,7 @@ as seguintes funcionalidades:
 
 - Criação de conta
 - Login
-- CRUD de recados (create, read, update e delete
+- CRUD de recados create, read, update e delete
 
 - Não pode ter mais de um usuário com o mesmo e-mail
 - O login deve ser feito com e-mail e senha
@@ -18,5 +18,6 @@ Além disso, prestem atenção nos seguintes pontos
 - Código limpo
 - Utilização dos recursos da linguagem
 
-
+isntall jwt 
+validação cadastro uusuário
 
