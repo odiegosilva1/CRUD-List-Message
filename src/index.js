@@ -1,24 +1,9 @@
 import express, { request, response } from 'express';
 import express from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 const app = express();
 
 app.use(express.json());
-
-let verifyJwt = function (req, res, next) {
-  const body = req.body;
-
-  jwt.verify(body.accessToken, "growdev", (err, user) => {
-
-    if (err) {
-      return res.status(403).json("Token access failed");
-    }
-
-    req.user = user;
-    next();
-  });
-};
 
 let users = 1
 const messageList = []
