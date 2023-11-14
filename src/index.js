@@ -1,42 +1,27 @@
-import express, { request, response } from 'express';
+import { randomUUID } from 'node:crypto';
 import express from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 const app = express();
 
 app.use(express.json());
-
-let verifyJwt = function (req, res, next) {
-  const body = req.body;
-
-  jwt.verify(body.accessToken, "growdev", (err, user) => {
-
-    if (err) {
-      return res.status(403).json("Token access failed");
-    }
-
-    req.user = user;
-    next();
-  });
-};
 
 let users = 1
 const messageList = []
 const user = [
   {
-    id: users++,
+    id: randomUUID(),
     name: "Diego",
     email: "mail@me1",
     pwd: "$2a$06$.EcekE08nGe8cOTz7jp86ulRMCFO7vaesTT1eRVay.KPrhSwN0ouW"
   },
   {
-    id: users++,
+    id: randomUUID(),
     name: "Ana",
     email: "mail@me2",
     pwd: "$2a$06$fEn.pmfaO9JIYQZlj6Yvfe6fOuhmCuFTWYAceAXIX0J/KnL5ZMFJi"
   },
   {
-    id: users++,
+    id: randomUUID(),
     name: "Renato",
     email: "mail@me3",
     pwd: "$2a$06$PJj.36GgjYGs.wddloOt6ui/3Tn0bNEARKzJqPUMI9p0c/qIB45s6"
