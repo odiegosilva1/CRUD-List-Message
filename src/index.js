@@ -30,7 +30,7 @@ const user = [
 
 let idMessage = 1
 
-app.get('/messageList', (req, res) => {
+app.get('/users', (req, res) => {
   return res.json('ok')
 });
 
@@ -171,12 +171,6 @@ app.post('/user/login', async (req, res) => {
     return res.status(401).json("Invalid credentials")
   }
 
-  const accessToken = jwt.sign({ username: existingEmail.name },
-    "growdev", { expiresIn: "1900s", }
-  );
-  return res.status(201).json({
-    accessToken,
-  });
 })
 
 //update user
@@ -215,7 +209,7 @@ app.delete('/user/:id', (req, res) => {
   })
 
   if (delUserIndex === -1) {
-    return res.status(400).json("ID inválido")
+    return res.status(400).json("ID not found")
   }
 
   delete users[delUserIndex]
