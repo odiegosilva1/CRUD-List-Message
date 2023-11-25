@@ -1,43 +1,79 @@
-# Project Name
 
-## Description
+# Final Project - User Authentication and Messaging API
 
-Briefly describe your project here.
+This project implements a user authentication and messaging API using Express.js and bcrypt for password hashing. It provides endpoints to register users, log in, manage users, and handle messages.
 
-## Instalação
+## Getting Started
 
-Para instalar as dependências necessárias para este projeto, siga estes passos:
+To get this project running on your local machine, follow these steps:
 
-1. Clone o repositório: `git clone https://github.com/seu/repositorio.git`
-2. Navegue até o diretório do projeto: `cd pasta-do-projeto`
-3. Instale as dependências: `npm install` ou `yarn install`
+### Prerequisites
+
+- Node.js and npm installed
+
+### Installation
+
+1. Clone the repository or download the source code.
+2. Navigate to the project directory in your terminal.
+3. Install dependencies using `npm install`.
+
+### Running the Server
+
+Start the server by running:
+
+```
+npm start
+```
+
+The server will start on port `8080`.
 
 ## Endpoints
 
-### Obter Dados do Usuário
+### Register a User
 
-- **Endpoint:** `/users`
-- **Método:** GET
-- **Descrição:** Recupera dados de todos os usuários.
-- **Parâmetros:** Nenhum
-- **Resposta:** Objeto JSON contendo dados do usuário.
+- **URL:** `/final-project/add-user`
+- **Method:** `POST`
+- **Description:** Register a new user with a unique email, name, and password.
+- **Request Body:**
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "your_password"
+  }
+  ```
+- **Response:** 
+  - `201 Created` - User added successfully
+  - `400 Bad Request` - If invalid or missing parameters
 
-### Editar Mensagem do Usuário
+### Log In
 
-- **Endpoint:** `/users/:userId/messages/:messageId`
-- **Método:** PUT
-- **Descrição:** Edita uma mensagem específica de um usuário.
-- **Parâmetros:**
-  - `userId`: ID do usuário
-  - `messageId`: ID da mensagem
-- **Corpo da Requisição:** Objeto JSON contendo dados da mensagem modificada com o seguinte formato:
+- **URL:** `/final-project/login`
+- **Method:** `POST`
+- **Description:** Authenticate a user.
+- **Request Body:**
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "your_password"
+  }
+  ```
+- **Response:** 
+  - `201 Created` - User logged in successfully
+  - `400 Bad Request` - If invalid or missing parameters or incorrect credentials
 
-```
-json
-{
-  "id": "messageId",
-  "title": "Novo Título",
-  "description": "Nova Descrição"
-}
+### View User Details
 
-```
+- **URL:** `/final-project/view-user?id=<user_id>`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific user by ID.
+- **Response:** 
+  - User details in JSON format
+  - `400 Bad Request` - If the user is not found
+
+... (Continue documenting other endpoints similarly)
+
+## Contributing
+
+Feel free to contribute to this project by opening issues or pull requests.
+
