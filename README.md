@@ -1,9 +1,11 @@
 # Project Name
 
 ## Description
+
 Briefly describe your project here.
 
 ## Installation
+
 To install the dependencies required for this project, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/your/repository.git`
@@ -13,13 +15,15 @@ To install the dependencies required for this project, follow these steps:
 ## Endpoints
 
 ### Get User Data
+
 - **Endpoint:** `/users`
 - **Method:** GET
 - **Description:** Retrieve data of all users.
 - **Parameters:** None
 - **Response:** JSON object containing user data.
 
-### Edit User Message
+### Edit User Messags
+
 - **Endpoint:** `/users/:userId/messages/:messageId`
 - **Method:** PUT
 - **Description:** Edit a specific message of a user.
@@ -27,7 +31,7 @@ To install the dependencies required for this project, follow these steps:
   - `userId`: ID of the user
   - `messageId`: ID of the message
 - **Request Body:** JSON object containing modified message data with the following format:
-  ```json
+ json
   {
     "id": "messageId",
     "title": "New Title",
