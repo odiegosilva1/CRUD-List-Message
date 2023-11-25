@@ -6,7 +6,10 @@
   "author": "Diego Silva <odiegosilvadev@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
+    "express": "^4.18.2",
+    "uuid-random": "^1.3.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
@@ -14,5 +17,5 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js"
-    }
+  }
 }
