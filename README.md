@@ -1,4 +1,4 @@
-# Project Name
+# CRUD List Message
 
 ## Description
 This project is a to-do list application built using Express.js for the backend API. It incorporates CRUD (Create, Read, Update, Delete) functionalities for managing tasks and also includes user authentication and registration features. Users can create, update, delete, and view their tasks through the API endpoints while ensuring secure access through user authentication.
