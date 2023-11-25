@@ -22,7 +22,7 @@ To get this project running on your local machine, follow these steps:
 Start the server by running:
 
 ```
-npm start
+yarn dev
 ```
 
 The server will start on port `8080`.
