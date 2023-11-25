@@ -1,10 +1,8 @@
-Claro, aqui estão algumas sugestões para melhorar o arquivo README:
+# Project Name
 
-# Nome do Projeto
+## Description
 
-## Descrição
-
-Forneça uma descrição detalhada do seu projeto aqui. Isso ajuda os usuários a entenderem do que se trata o projeto, seus objetivos e funcionalidades principais.
+Briefly describe your project here.
 
 ## Instalação
 
