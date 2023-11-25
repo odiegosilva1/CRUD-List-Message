@@ -1,43 +1,79 @@
-# CRUD List Message
 
-## Description
+# Final Project - User Authentication and Messaging API
 
+This project implements a user authentication and messaging API using Express.js and bcrypt for password hashing. It provides endpoints to register users, log in, manage users, and handle messages.
 
-Briefly describe your project here.
+## Getting Started
 
-This project is a to-do list application built using Express.js for the backend API. It incorporates CRUD (Create, Read, Update, Delete) functionalities for managing tasks and also includes user authentication and registration features. Users can create, update, delete, and view their tasks through the API endpoints while ensuring secure access through user authentication.
+To get this project running on your local machine, follow these steps:
 
+### Prerequisites
 
-## Installation
+- Node.js and npm installed
 
-To install the dependencies required for this project, follow these steps:
+### Installation
 
-1. Clone the repository: `git clone https://github.com/your/repository.git`
-2. Navigate to the project directory: `cd project-directory`
-3. Install dependencies: `npm install` or `yarn install`
+1. Clone the repository or download the source code.
+2. Navigate to the project directory in your terminal.
+3. Install dependencies using `npm install`.
+
+### Running the Server
+
+Start the server by running:
+
+```
+npm start
+```
+
+The server will start on port `8080`.
 
 ## Endpoints
 
-### Get User Data
+### Register a User
 
-- **Endpoint:** `/users`
-- **Method:** GET
-- **Description:** Retrieve data of all users.
-- **Parameters:** None
-- **Response:** JSON object containing user data.
-
-### Edit User Messags
-
-- **Endpoint:** `/users/:userId/messages/:messageId`
-- **Method:** PUT
-- **Description:** Edit a specific message of a user.
-- **Parameters:**
-  - `userId`: ID of the user
-  - `messageId`: ID of the message
-- **Request Body:** JSON object containing modified message data with the following format:
- json
+- **URL:** `/final-project/add-user`
+- **Method:** `POST`
+- **Description:** Register a new user with a unique email, name, and password.
+- **Request Body:**
+  ```json
   {
-    "id": "messageId",
-    "title": "New Title",
-    "description": "New Description"
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "your_password"
   }
+  ```
+- **Response:** 
+  - `201 Created` - User added successfully
+  - `400 Bad Request` - If invalid or missing parameters
+
+### Log In
+
+- **URL:** `/final-project/login`
+- **Method:** `POST`
+- **Description:** Authenticate a user.
+- **Request Body:**
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "your_password"
+  }
+  ```
+- **Response:** 
+  - `201 Created` - User logged in successfully
+  - `400 Bad Request` - If invalid or missing parameters or incorrect credentials
+
+### View User Details
+
+- **URL:** `/final-project/view-user?id=<user_id>`
+- **Method:** `GET`
+- **Description:** Retrieve details of a specific user by ID.
+- **Response:** 
+  - User details in JSON format
+  - `400 Bad Request` - If the user is not found
+
+... (Continue documenting other endpoints similarly)
+
+## Contributing
+
+Feel free to contribute to this project by opening issues or pull requests.
+
