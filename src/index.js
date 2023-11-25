@@ -1,144 +1,263 @@
 
-import { randomUUID } from 'crypto';
-import express, { response } from 'express';
+import express from 'express';
 import bcrypt from "bcrypt";
-import { request } from 'http';
 
 const app = express();
-
 app.use(express.json());
 
-const usuarios = [
-    {
-        id: randomUUID(),
-        nome: "Renato",
-        email: "renato@mail.com",
-        senha: "$2a$06$oWaGUzjgm8wGpV8otyteyuuiLM3blA6ul2q.X3X6df33zLStZBwXK",
-        recados: [
-            {
-                id: randomUUID(),
-                titulo: "Dentista",
-                descricao: "3:00"
-            }
-        ]
-    },
-    {
-        id: randomUUID(),
-        nome: "Carlos",
-        email: "carlos@mail.com",
-        senha: "$2a$06$6aRs1GjmDyjTFUPzJWqx7OohIj74m4KNOhMoCE9LjLp6e/.BZgJOe",
-        recados: [
-            {
-                id: randomUUID(),
-                titulo: "Comprar carro",
-                descricao: "Não consigo"
-            }
-        ]
-    },
-    {
-        id: randomUUID(),
-        nome: "Diego Silva",
-        email: "silva@mail.com",
-        senha: "$2a$06$fyo17xUNtk0eHJt4ehjdku6a7DQpn.HChRhQfneBHMdH9XbvW75ha",
-        recados: [
-            {
-                id: randomUUID(),
-                titulo: "Trabalho",
-                descricao: "Entregar"
-            }
-        ]
-    }
-]
+let usersList = [];
+let counter = 0;
+let messageCounter = 0;
 
-app.get('/', (request, response) => {
-    return response.json('OK')
+app.post('/final-project/add-user', async (request, response) => {
+    const infoRequest = request.body;
+
+    if (infoRequest.name === undefined || infoRequest.name === "") {
+        return response.status(400).json("Provide a valid name");
+    }
+
+    if (infoRequest.email === undefined || infoRequest.email === "") {
+        return response.status(400).json("Provide a valid email");
+    }
+
+    if (infoRequest.password === undefined || infoRequest.password === "") {
+        return response.status(400).json("Provide a valid password");
+    }
+
+    let user = usersList.find(item => item.email == infoRequest.email);
+    if (user) {
+        return response.status(400).json("Email already registered");
+    }
+
+    const hashedPassword = await bcrypt.hash(infoRequest.password, 6);
+
+    const newUser = {
+        id: ++counter,
+        name: infoRequest.name,
+        email: infoRequest.email,
+        password: hashedPassword,
+        messages: []
+    }
+
+    usersList.push(newUser);
+    return response.status(201).json("User added successfully");
 });
 
-app.get('/usuario', (request, response) => {
-    return response.json(usuarios)
-})
+app.post('/final-project/login', async (request, response) => {
+    const infoRequest = request.body;
 
-app.get('/usuario/:id/recados/', (request, response) => {
-    const params = request.params.id
-
-
-    const pegaUsuariosPeloIndice = usuarios.findIndex((usuario) => {
-        return usuario.id == params
-    })
-
-    if (pegaUsuariosPeloIndice === -1) {
-        return response.status(400).json("Usuario não encontrado")
+    if (infoRequest.email === undefined || infoRequest.email === "") {
+        return response.status(400).json("Provide a valid email");
     }
 
-    return response.json(usuarios[pegaUsuariosPeloIndice]);
-
-})
-
-
-
-app.post('/usuario/login', async (request, response) => {
-    const body = request.body;
-
-    if (body.email == undefined) {
-        return response.status(400).json("E-mail não informado!");
+    if (infoRequest.password === undefined || infoRequest.password === "") {
+        return response.status(400).json("Provide a valid password");
     }
 
-    if (body.senha == undefined) {
-        return response.status(400).json("Senha não informada!");
+    let user = usersList.find(user => user.email == infoRequest.email);
+    if (!user) {
+        return response.status(400).json("Incorrect data");
     }
 
-    const existeEmail = usuarios.find(usuario => {
-        return usuario.email === body.email;
-    });
+    const passwordCorrect = await bcrypt.compare(
+        infoRequest.password,
+        user.password
+    );
 
-    if (existeEmail === undefined) {
-        return response.status(401).json("Credenciais inválidas!");
+    if (!passwordCorrect) {
+        return response.status(400).json("Incorrect data");
     }
 
-    const hashedSenha = await bcrypt.compare(body.senha, existeEmail.senha);
-
-    if (hashedSenha === false) {
-        return response.status(401).json("Credenciais inválidas!");
-    }
-
-    return response.status(201).json({
-        message: "Autenticação bem-sucedida!",
-    });
+    return response.status(201).json("User logged in");
 });
 
-app.put('/usario/recados/:idRecado', (request, response) => {
-    const body = request.body
-    const idAutenticado = request.user.usuarioId
-    const idRecado = request.params.params.idRecado
+app.get('/final-project/list-users', (request, response) => {
+    return response.json(usersList);
+});
 
-    const pegaIndiceUsuario = usuarios.findIndex(usuario => {
-        return usuario.id == idAutenticado
-    })
-    if (pegaIndiceUsuario === -1) {
-        return response.status(401).json("Usuário não Autenticado")
+app.get('/final-project/view-user', (request, response) => {
+    const parameters = request.query;
+
+    let user = usersList.find(user => user.id == parameters.id);
+    if (!user) {
+        return response.status(400).json("User not found");
     }
 
-    const pegaIndiceRecado = usuarios[pegaIndiceUsuario].recados.findIndex(recado => {
-        return recado.id === idRecados
-    })
+    return response.json(user);
+});
 
-    if (pegaIndiceRecado === -1) {
-        return response.status(400).json("Recado inválido")
+app.put('/final-project/edit-user', async (request, response) => {
+    const infoRequest = request.body;
+
+    if (infoRequest.id === undefined || infoRequest.id === "") {
+        return response.status(400).json("Provide a correct id");
     }
 
-    const recado = {
-        id: idRecados,
-        titulo: body.titulo,
-        descricao: body.descricao
+    if (infoRequest.name === undefined || infoRequest.name === "") {
+        return response.status(400).json("Provide a valid name");
     }
 
-    usuarios[pegaIndiceUsuario].recados[pegaIndiceRecado] = recado
+    if (infoRequest.email === undefined || infoRequest.email === "") {
+        return response.status(400).json("Provide a valid email");
+    }
 
-    return response.status(201).json("Recado atualizado com sucesso!!")
-})
+    if (infoRequest.password === undefined || infoRequest.password === "") {
+        return response.status(400).json("Provide a valid password");
+    }
+
+    const hashedPassword = await bcrypt.hash(infoRequest.password, 6);
+
+    const editedUser = {
+        id: infoRequest.id,
+        name: infoRequest.name,
+        email: infoRequest.email,
+        password: hashedPassword,
+        messages: []
+    }
+
+    let index = usersList.findIndex(user => user.id == infoRequest.id);
+    if (index === -1) {
+        return response.status(400).json("Change the message");
+    }
+
+    usersList[index] = editedUser;
+    return response.status(201).json("User edited successfully");
+});
+
+app.delete('/final-project/delete-user', (request, response) => {
+    const parameters = request.query;
+    const userId = parameters.id_user;
+    let user = usersList.find(user => user.id == userId);
+
+    if (!user) {
+        return response.status(400).json("Invalid user");
+    }
+
+    usersList = usersList.filter(user => user.id != userId);
+    return response.status(200).json('User deleted successfully');
+});
+
+app.delete('/final-project/delete-message', (request, response) => {
+    const parameters = request.query;
+    const messageId = parameters.id_message;
+    const userId = parameters.id_user;
+
+    let user = usersList.find(user => user.id == userId);
+
+    if (!user) {
+        return response.status(400).json("Invalid user");
+    }
+
+    let messageIndex = user.messages.findIndex(message => message.id == messageId);
+
+    if (messageIndex === -1) {
+        return response.status(400).json("Message not found");
+    }
+
+    user.messages = user.messages.filter(message => message.id != messageId);
+    return response.status(200).json('Message deleted successfully');
+});
+
+app.get('/final-project/messages', (request, response) => {
+    return response.json('Postman Running');
+});
+
+app.post('/final-project/add-message', (request, response) => {
+    const infoRequest = request.body;
+
+    if (infoRequest.id_user === undefined || infoRequest.id_user === "") {
+        return response.status(400).json("Provide a correct id");
+    }
+
+    if (infoRequest.title === undefined || infoRequest.title === "") {
+        return response.status(400).json("Provide a valid title");
+    }
+
+    if (infoRequest.description === undefined || infoRequest.description === "") {
+        return response.status(400).json("Provide a valid description");
+    }
+
+    let user = usersList.find(user => user.id == infoRequest.id_user);
+    if (!user) {
+        return response.status(400).json("Invalid user");
+    }
+
+    const newMessage = {
+        id: ++messageCounter,
+        title: infoRequest.title,
+        description: infoRequest.description,
+    }
+
+    user.messages.push(newMessage);
+    return response.status(201).json('The message "' + newMessage.description + '" was added successfully');
+});
 
 
-//Deleta Recado
+app.get('/final-project/list-messages/:id?', (request, response) => {
+    const parameters = request.query;
 
+    let user = usersList.find(item => item.id == parameters.id);
+    if (user !== undefined) {
+        return response.status(201).json(user.messages);
+    } else {
+        return response.status(201).json(parameters.id);
+    }
+});
 
-app.listen(8080, () => console.log("Servidor iniciado"));
+app.get('/final-project/view-message', (request, response) => {
+    const parameters = request.query;
+
+    let user = usersList.find(user => user.id == parameters.id_user);
+    if (!user) {
+        return response.status(400).json("Message not found");
+    }
+
+    let message = user.messages.find(message => message.id == parameters.id_message);
+    if (!message) {
+        return response.status(400).json("Message not found");
+    }
+
+    return response.json(message);
+});
+
+app.put('/final-project/edit-message', async (request, response) => {
+    const infoRequest = request
+
+    if (infoRequest.id_user === undefined || infoRequest.id_user === "") {
+        return response.status(400).json("Enter a correct id")
+    }
+
+    if (infoRequest.id_recado === undefined || infoRequest.id_recado === "") {
+        return response.status(400).json("Enter a correct id");
+    }
+
+    if (infoRequest.titulo === undefined || infoRequest.titulo === "") {
+        return response.status(400).json("Please enter a valid name");
+    }
+
+    if (infoRequest.descricao === undefined || infoRequest.descricao === "") {
+        return response.status(400).json("Please provide a valid email");
+    }
+
+    const modifiedMessage = {
+        id: infoRequest.id_recado,
+        title: infoRequest.titulo,
+        description: infoRequest.descricao,
+    };
+
+    let user = user_list.find(user => user.id == infoRequest.id_user);
+    if (!user) {
+        return response.status(400).json("Could not complete your request");
+    }
+
+    let index = user.messages.findIndex(message => message.id == infoRequest.id_recado);
+    if (index === -1) {
+        return response.status(400).json("Could not complete your request");
+    }
+
+    user.messages[index] = modifiedMessage;
+    return response.status(201).json("Message edited successfully");
+});
+
+app.listen(8080, () => console.log("Start Server"));
+

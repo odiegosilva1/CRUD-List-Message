@@ -1,23 +1,35 @@
-# Aplicação Lista de Recados
+# Project Name
 
-Vamos criar um back-end que contém
-as seguintes funcionalidades:
+## Description
+Briefly describe your project here.
 
-- Criação de conta
-- Login
-- CRUD de recados create, read, update e delete
+## Installation
+To install the dependencies required for this project, follow these steps:
 
-- Não pode ter mais de um usuário com o mesmo e-mail
-- O login deve ser feito com e-mail e senha
-- Cada recado deve ser de um único usuário.
+1. Clone the repository: `git clone https://github.com/your/repository.git`
+2. Navigate to the project directory: `cd project-directory`
+3. Install dependencies: `npm install` or `yarn install`
 
+## Endpoints
 
-Além disso, prestem atenção nos seguintes pontos
+### Get User Data
+- **Endpoint:** `/users`
+- **Method:** GET
+- **Description:** Retrieve data of all users.
+- **Parameters:** None
+- **Response:** JSON object containing user data.
 
-- Boas práticas
-- Código limpo
-- Utilização dos recursos da linguagem
-
-isntall jwt 
-validação cadastro uusuário
-
+### Edit User Message
+- **Endpoint:** `/users/:userId/messages/:messageId`
+- **Method:** PUT
+- **Description:** Edit a specific message of a user.
+- **Parameters:**
+  - `userId`: ID of the user
+  - `messageId`: ID of the message
+- **Request Body:** JSON object containing modified message data with the following format:
+  ```json
+  {
+    "id": "messageId",
+    "title": "New Title",
+    "description": "New Description"
+  }
