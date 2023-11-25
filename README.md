@@ -1,79 +1,79 @@
+# Final Project - User Management API
 
-# Final Project - User Authentication and Messaging API
-
-This project implements a user authentication and messaging API using Express.js and bcrypt for password hashing. It provides endpoints to register users, log in, manage users, and handle messages.
-
-## Getting Started
-
-To get this project running on your local machine, follow these steps:
-
-### Prerequisites
-
-- Node.js and npm installed
-
-### Installation
-
-1. Clone the repository or download the source code.
-2. Navigate to the project directory in your terminal.
-3. Install dependencies using `npm install`.
-
-### Running the Server
-
-Start the server by running:
-
-```
-npm start
-```
-
-The server will start on port `8080`.
+This project is an API for user management and messaging. It provides endpoints for user registration, login, user information retrieval, user editing, user deletion, and messaging operations.
 
 ## Endpoints
 
-### Register a User
+### Add User
 
-- **URL:** `/final-project/add-user`
-- **Method:** `POST`
-- **Description:** Register a new user with a unique email, name, and password.
-- **Request Body:**
-  ```json
-  {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "your_password"
-  }
-  ```
-- **Response:** 
-  - `201 Created` - User added successfully
-  - `400 Bad Request` - If invalid or missing parameters
+- **POST /final-project/add-user**
+  - Creates a new user with a name, email, and password.
 
-### Log In
+### Login
 
-- **URL:** `/final-project/login`
-- **Method:** `POST`
-- **Description:** Authenticate a user.
-- **Request Body:**
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "your_password"
-  }
-  ```
-- **Response:** 
-  - `201 Created` - User logged in successfully
-  - `400 Bad Request` - If invalid or missing parameters or incorrect credentials
+- **POST /final-project/login**
+  - Allows users to log in by verifying their credentials.
 
-### View User Details
+### List Users
 
-- **URL:** `/final-project/view-user?id=<user_id>`
-- **Method:** `GET`
-- **Description:** Retrieve details of a specific user by ID.
-- **Response:** 
-  - User details in JSON format
-  - `400 Bad Request` - If the user is not found
+- **GET /final-project/list-users**
+  - Returns the list of all registered users.
 
-... (Continue documenting other endpoints similarly)
+### View User
 
-## Contributing
+- **GET /final-project/view-user**
+  - Displays details of a specific user based on the provided ID.
 
-Feel free to contribute to this project by opening issues or pull requests.
+### Edit User
 
+- **PUT /final-project/edit-user**
+  - Enables the editing of an existing user's information.
+
+### Delete User
+
+- **DELETE /final-project/delete-user**
+  - Removes a user from the list of registered users.
+
+### Delete Message
+
+- **DELETE /final-project/delete-message**
+  - Deletes a specific message associated with a user.
+
+### Messages Endpoint
+
+- **GET /final-project/messages**
+  - Returns a message indicating that Postman is running.
+
+### Add
+
+- **POST /final-project/add-message**
+  - Adds a new message to the specified user.
+
+### List Messages
+
+- **GET /final-project/list-messages/:id?**
+  - Returns the list of messages for a specific user based on the provided ID.
+
+### View Message
+
+- **GET /final-project/view-message**
+  - Displays details of a specific message associated with a user.
+
+### Edit Message
+
+- **PUT /final-project/edit-message**
+  - Modifies the details of a specific message associated with a user.
+
+- [Express](https://expressjs.com/): Fast, unopinionated, minimalist web framework for Node.js.
+- [Bcrypt](https://www.npmjs.com/package/bcrypt): A library to help hash passwords.
+
+## Usage
+
+1. Install dependencies using `yarn install`.
+
+2. Run the server with `yarn dev`.
+3. Access the API using the specified endpoints.
+
+Feel free to explore and contribute to this project! If you encounter any issues or have suggestions, please open an issue on the GitHub repository.
+
+---
