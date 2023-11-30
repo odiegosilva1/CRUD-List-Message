@@ -1,79 +1,50 @@
+# Express Project README
 
-# Final Project - User Authentication and Messaging API
+## Overview
 
-This project implements a user authentication and messaging API using Express.js and bcrypt for password hashing. It provides endpoints to register users, log in, manage users, and handle messages.
+This project is a simple Express application that manages users and their messages using various RESTful endpoints. It includes functionalities to create, retrieve, update, and delete users and their messages.
 
 ## Getting Started
 
-To get this project running on your local machine, follow these steps:
+To run this application, follow these steps:
 
-### Prerequisites
+1. Clone this repository to your local machine.
+2. Install the required dependencies using `npm install`.
+3. Start the server by running `node <your_script_name>.js`.
 
-- Node.js and npm installed
+## Project Structure
 
-### Installation
+### Dependencies
 
-1. Clone the repository or download the source code.
-2. Navigate to the project directory in your terminal.
-3. Install dependencies using `npm install`.
+- **Express**: Web framework for Node.js used for building APIs.
+- **Cors**: Middleware for enabling CORS in the Express app.
+- **Bcrypt**: Library for hashing passwords securely.
+- **Crypto**: Node.js built-in module for cryptographic operations.
+- **JsonWebToken (JWT)**: For handling JSON Web Tokens.
 
-### Running the Server
+### Scripts
 
-Start the server by running:
+- `node <your_script_name>.js`: Start the Express server.
 
-```
-yarn dev
-```
+### Endpoints
 
-The server will start on port `8080`.
+#### Users
 
-## Endpoints
+- `POST /final-project/add-user`: Create a new user.
+- `GET /final-project/list-users`: Retrieve the list of all users.
+- `GET /final-project/view-user?id=<user_id>`: Get details of a specific user.
+- `PUT /final-project/edit-user`: Update user information.
+- `DELETE /final-project/delete-user?id_user=<user_id>`: Delete a user.
 
-### Register a User
+#### Messages
 
-- **URL:** `/final-project/add-user`
-- **Method:** `POST`
-- **Description:** Register a new user with a unique email, name, and password.
-- **Request Body:**
-  ```json
-  {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "your_password"
-  }
-  ```
-- **Response:** 
-  - `201 Created` - User added successfully
-  - `400 Bad Request` - If invalid or missing parameters
+- `POST /final-project/add-message`: Add a message to a user.
+- `GET /final-project/list-messages/:id?`: Get messages of a specific user.
+- `GET /final-project/view-message?id_user=<user_id>&id_message=<message_id>`: View a specific message of a user.
+- `PUT /final-project/edit-message`: Update a message of a user.
+- `DELETE /final-project/delete-message?id_user=<user_id>&id_message=<message_id>`: Delete a message of a user.
 
-### Log In
+## Usage
 
-- **URL:** `/final-project/login`
-- **Method:** `POST`
-- **Description:** Authenticate a user.
-- **Request Body:**
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "your_password"
-  }
-  ```
-- **Response:** 
-  - `201 Created` - User logged in successfully
-  - `400 Bad Request` - If invalid or missing parameters or incorrect credentials
-
-### View User Details
-
-- **URL:** `/final-project/view-user?id=<user_id>`
-- **Method:** `GET`
-- **Description:** Retrieve details of a specific user by ID.
-- **Response:** 
-  - User details in JSON format
-  - `400 Bad Request` - If the user is not found
-
-... (Continue documenting other endpoints similarly)
-
-## Contributing
-
-Feel free to contribute to this project by opening issues or pull requests.
-
+- **Users**: Perform CRUD operations on users. Create, retrieve, update, and delete user information.
+- **Messages**: Manage messages associated with users. Add, view, edit, and delete messages.
