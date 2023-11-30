@@ -1,80 +1,79 @@
-
-import express from 'express';
-import bcrypt from "bcrypt";
+const express = require('express');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const { randomUUID } = require('crypto');  // Adicionando a importação de randomUUID
 
 const app = express();
 app.use(express.json());
+app.use(cors()); // Adicionando o middleware CORS
 
+// Lista de usuários e contadores
 let usersList = [];
 let counter = 0;
 let messageCounter = 0;
 
-app.post('/final-project/add-user', async (request, response) => {
+// Função middleware para verificar token JWT
+const verifyJwt = function (req, res, next) {
+    const body = req.body;
+
+    jwt.verify(body.accessToken, "growdev", (err, idUsuario) => {
+        if (err) {
+            return res.status(403).json("Access token invalido");
+        }
+        req.user = idUsuario;
+
+        next();
+    });
+};
+
+// Rota para adicionar mensagem (editada conforme seu modelo de código)
+app.post('/final-project/edit-message', async (request, response) => {
     const infoRequest = request.body;
 
-    if (infoRequest.name === undefined || infoRequest.name === "") {
-        return response.status(400).json("Provide a valid name");
+    if (infoRequest.id_user === undefined || infoRequest.id_user === "") {
+        return response.status(400).json("Enter a correct id");
     }
 
-    if (infoRequest.email === undefined || infoRequest.email === "") {
-        return response.status(400).json("Provide a valid email");
+    if (infoRequest.id_recado === undefined || infoRequest.id_recado === "") {
+        return response.status(400).json("Enter a correct id");
     }
 
-    if (infoRequest.password === undefined || infoRequest.password === "") {
-        return response.status(400).json("Provide a valid password");
+    if (infoRequest.titulo === undefined || infoRequest.titulo === "") {
+        return response.status(400).json("Please enter a valid title");
     }
 
-    let user = usersList.find(item => item.email == infoRequest.email);
-    if (user) {
-        return response.status(400).json("Email already registered");
+    if (infoRequest.descricao === undefined || infoRequest.descricao === "") {
+        return response.status(400).json("Please provide a valid description");
     }
 
-    const hashedPassword = await bcrypt.hash(infoRequest.password, 6);
+    const modifiedMessage = {
+        id: infoRequest.id_recado,
+        title: infoRequest.titulo,
+        description: infoRequest.descricao,
+    };
 
-    const newUser = {
-        id: ++counter,
-        name: infoRequest.name,
-        email: infoRequest.email,
-        password: hashedPassword,
-        messages: []
-    }
-
-    usersList.push(newUser);
-    return response.status(201).json("User added successfully");
-});
-
-app.post('/final-project/login', async (request, response) => {
-    const infoRequest = request.body;
-
-    if (infoRequest.email === undefined || infoRequest.email === "") {
-        return response.status(400).json("Provide a valid email");
-    }
-
-    if (infoRequest.password === undefined || infoRequest.password === "") {
-        return response.status(400).json("Provide a valid password");
-    }
-
-    let user = usersList.find(user => user.email == infoRequest.email);
+    // Corrigindo a busca do usuário na lista
+    let user = usersList.find(user => user.id === infoRequest.id_user);
     if (!user) {
-        return response.status(400).json("Incorrect data");
+        return response.status(400).json("Could not complete your request");
     }
 
-    const passwordCorrect = await bcrypt.compare(
-        infoRequest.password,
-        user.password
-    );
-
-    if (!passwordCorrect) {
-        return response.status(400).json("Incorrect data");
+    // Corrigindo o nome da lista de usuários
+    let index = usersList.findIndex(user => user.id === infoRequest.id_user);
+    if (index === -1) {
+        return response.status(400).json("Could not complete your request");
     }
 
-    return response.status(201).json("User logged in");
+    user.recados[index] = modifiedMessage; // Corrigindo a atualização da mensagem
+    return response.status(201).json("Message edited successfully");
 });
 
+// Rota para obter a lista de usuários
 app.get('/final-project/list-users', (request, response) => {
     return response.json(usersList);
 });
 
+// Rota para visualizar um usuário específico
 app.get('/final-project/view-user', (request, response) => {
     const parameters = request.query;
 
@@ -86,6 +85,7 @@ app.get('/final-project/view-user', (request, response) => {
     return response.json(user);
 });
 
+// Rota para editar informações do usuário
 app.put('/final-project/edit-user', async (request, response) => {
     const infoRequest = request.body;
 
@@ -113,17 +113,18 @@ app.put('/final-project/edit-user', async (request, response) => {
         email: infoRequest.email,
         password: hashedPassword,
         messages: []
-    }
+    };
 
     let index = usersList.findIndex(user => user.id == infoRequest.id);
     if (index === -1) {
-        return response.status(400).json("Change the message");
+        return response.status(400).json("User not found");
     }
 
     usersList[index] = editedUser;
     return response.status(201).json("User edited successfully");
 });
 
+// Rota para deletar um usuário
 app.delete('/final-project/delete-user', (request, response) => {
     const parameters = request.query;
     const userId = parameters.id_user;
@@ -137,6 +138,7 @@ app.delete('/final-project/delete-user', (request, response) => {
     return response.status(200).json('User deleted successfully');
 });
 
+// Rota para deletar uma mensagem de um usuário
 app.delete('/final-project/delete-message', (request, response) => {
     const parameters = request.query;
     const messageId = parameters.id_message;
@@ -158,10 +160,12 @@ app.delete('/final-project/delete-message', (request, response) => {
     return response.status(200).json('Message deleted successfully');
 });
 
+// Rota de teste para verificar se o servidor está em execução
 app.get('/final-project/messages', (request, response) => {
-    return response.json('Postman Running');
+    return response.json('Server is running');
 });
 
+// Rota para adicionar uma mensagem a um usuário
 app.post('/final-project/add-message', (request, response) => {
     const infoRequest = request.body;
 
@@ -186,13 +190,13 @@ app.post('/final-project/add-message', (request, response) => {
         id: ++messageCounter,
         title: infoRequest.title,
         description: infoRequest.description,
-    }
+    };
 
     user.messages.push(newMessage);
     return response.status(201).json('The message "' + newMessage.description + '" was added successfully');
 });
 
-
+// Rota para obter a lista de mensagens de um usuário
 app.get('/final-project/list-messages/:id?', (request, response) => {
     const parameters = request.query;
 
@@ -204,6 +208,7 @@ app.get('/final-project/list-messages/:id?', (request, response) => {
     }
 });
 
+// Rota para visualizar uma mensagem de um usuário
 app.get('/final-project/view-message', (request, response) => {
     const parameters = request.query;
 
@@ -220,11 +225,12 @@ app.get('/final-project/view-message', (request, response) => {
     return response.json(message);
 });
 
+// Rota para editar uma mensagem de um usuário
 app.put('/final-project/edit-message', async (request, response) => {
-    const infoRequest = request
+    const infoRequest = request.body;
 
     if (infoRequest.id_user === undefined || infoRequest.id_user === "") {
-        return response.status(400).json("Enter a correct id")
+        return response.status(400).json("Enter a correct id");
     }
 
     if (infoRequest.id_recado === undefined || infoRequest.id_recado === "") {
@@ -232,11 +238,11 @@ app.put('/final-project/edit-message', async (request, response) => {
     }
 
     if (infoRequest.titulo === undefined || infoRequest.titulo === "") {
-        return response.status(400).json("Please enter a valid name");
+        return response.status(400).json("Please enter a valid title");
     }
 
     if (infoRequest.descricao === undefined || infoRequest.descricao === "") {
-        return response.status(400).json("Please provide a valid email");
+        return response.status(400).json("Please provide a valid description");
     }
 
     const modifiedMessage = {
@@ -245,7 +251,7 @@ app.put('/final-project/edit-message', async (request, response) => {
         description: infoRequest.descricao,
     };
 
-    let user = user_list.find(user => user.id == infoRequest.id_user);
+    let user = usersList.find(user => user.id == infoRequest.id_user);
     if (!user) {
         return response.status(400).json("Could not complete your request");
     }
@@ -259,5 +265,5 @@ app.put('/final-project/edit-message', async (request, response) => {
     return response.status(201).json("Message edited successfully");
 });
 
+// Inicialização do servidor
 app.listen(8080, () => console.log("Start Server"));
-
